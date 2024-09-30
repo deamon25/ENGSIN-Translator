@@ -14,7 +14,7 @@ export default function Reset (){
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    Axios.post('http://localhost:3000/auth/reset/' + token,{  
+    Axios.post('http://localhost:5000/auth/reset/' + token,{  
         
       password,
 

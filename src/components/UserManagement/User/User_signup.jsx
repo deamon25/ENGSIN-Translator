@@ -24,7 +24,7 @@ const SignUp = () => {
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      const response = await axios.post('http://localhost:3000/auth/signup', values);
+      const response = await axios.post('http://localhost:5000/auth/signup', values);
       if (response.data.status) {
         toast.success("User Registered Successfully");
         navigate('/login'); // Navigate to login after successful signup

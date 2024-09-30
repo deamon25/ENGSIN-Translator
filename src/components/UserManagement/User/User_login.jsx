@@ -24,7 +24,7 @@ export default function LoginForm() {
 
     const handleSubmit = async (values, { setSubmitting, setErrors }) => {
         try {
-            const response = await Axios.post('http://localhost:3000/auth/login', values);
+            const response = await Axios.post('http://localhost:5000/auth/login', values);
             // Handle successful login (e.g., redirect, store token, etc.)
              if (response.data.status) {
 

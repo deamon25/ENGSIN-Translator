@@ -17,7 +17,7 @@ export default function Recovery() {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
-      const response = await Axios.post("http://localhost:3000/auth/recover", {
+      const response = await Axios.post("http://localhost:5000/auth/recover", {
         email: values.email,
       });
 

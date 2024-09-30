@@ -1,13 +1,35 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const  UserRouter  = require("./routes/user");
+const bodyParser = require("body-parser");
+const path = require('path');
+require('dotenv').config();
 
-// Initialize Express
+
+
+const PORT = process.env.PORT || 5000;
 const app = express();
 
-// Middleware
-app.use(express.json());  // To handle JSON payloads
-app.use(cors());  // To allow cross-origin requests
+
+
+
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true, // Allow cookies and credentials
+};
+
+app.use(cors(corsOptions));
+
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+
+
+app.use(express.json());
+app.use('/auth', UserRouter);
+app.use('/api/users', UserRouter);
+
 
 // Connect to MongoDB
 const ATLAS_URI = 'mongodb+srv://it22601360:UFF3K2JDI0uoU8Eq@itp.adbiuzh.mongodb.net/translationHistory?retryWrites=true&w=majority';
@@ -50,7 +72,7 @@ app.get('/api/translations', async (req, res) => {
 });
 
 // Start the server
-const PORT = 5000;
+
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
