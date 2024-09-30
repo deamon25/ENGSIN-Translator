@@ -4,6 +4,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Co
 import Translator from './components/Translator';
 import Additem from "./components/Definitions/Admin/AddItem/Additem";
 import DashBoard from "./components/Definitions/Admin/DashBoard/DashBoard";
+import UpdateItem from "./components/Definitions/Admin/UpdateItem/UpdateItem";
+import DetailsDash from "./components/Definitions/User/DetailsDash/DetailsDash";
+
 
 function App() {
   return (
@@ -13,6 +16,8 @@ function App() {
           <Route path="/" element={<Translator />} />
           <Route path="/additem" element={<Additem />} />
           <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/updateitem/:id" element={<UpdateItem />} />
+          <Route path="/userdetailsdash" element={<DetailsDash />} />
         </Routes>
       </div>
     </Router>

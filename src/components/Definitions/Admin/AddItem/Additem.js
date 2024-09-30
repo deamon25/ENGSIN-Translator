@@ -84,7 +84,7 @@ function Additem() {
   };
 
   const sendRequest = async () => {
-    await axios.post("http://localhost:5001/inventory", {
+    await axios.post("http://localhost:5000/inventory", {
       date: inputs.date,
       word: inputs.word,
       definition: inputs.definition,

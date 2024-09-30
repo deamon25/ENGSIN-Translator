@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import StarRating from "../StarRating"; 
 
-const URL = "http://localhost:5001/inventory";
+const URL = "http://localhost:5000/inventory";
 
 const fetchHandler = async () => {
   return await axios.get(URL).then((res) => res.data);

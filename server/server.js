@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const InventoryRoute = require("./Routes/InventoryRoutes");
 
 // Initialize Express
 const app = express();
@@ -8,6 +9,7 @@ const app = express();
 // Middleware
 app.use(express.json());  // To handle JSON payloads
 app.use(cors());  // To allow cross-origin requests
+app.use("/inventory", InventoryRoute);
 
 // Connect to MongoDB
 const ATLAS_URI = 'mongodb+srv://it22601360:UFF3K2JDI0uoU8Eq@itp.adbiuzh.mongodb.net/translationHistory?retryWrites=true&w=majority';
