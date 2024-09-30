@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import engsinWordwave from '../components/assets/engsinWordwave.png';
 import "./TopNav.css";
+import engsinWordwave from "./assets/engsinWordwave.png";
 
 
 

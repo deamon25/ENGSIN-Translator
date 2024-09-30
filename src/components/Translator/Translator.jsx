@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import lang from '../languages';
+import lang from '../../languages';
+import './style/trans.css';
+
 
 function Translator() {
     const [fromText, setFromText] = useState('');
