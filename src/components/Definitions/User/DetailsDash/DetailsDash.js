@@ -163,11 +163,6 @@ function DetailsDash() {
           </table>
         )}
       </div>
-
-      {/* Footer Section */}
-      <footer style={{ marginTop: "30px", textAlign: "center", fontSize: "14px", color: "#777" }}>
-        <p>© {new Date().getFullYear()} Your Company. All Rights Reserved.</p>
-      </footer>
     </div>
   );
 }

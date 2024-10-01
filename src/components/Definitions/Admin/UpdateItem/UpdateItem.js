@@ -126,7 +126,7 @@ function UpdateItem() {
   return (
     <div>
       <div className="children_div_admin">
-        <h1 className="topic_inventory">Update Definitions</h1>
+        <h1 className="topic_inventory"><b>Update Ratings</b></h1>
         <div className="item_full_box">
           <form className="item_form_admin" onSubmit={handleSubmit}>
             {/* Username field - readOnly */}

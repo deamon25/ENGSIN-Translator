@@ -155,7 +155,7 @@ function Additem() {
     <div>
       <div className="children_div_admin">
         <h1 className="topic_inventory">
-          Add Definitions <span className="sub_topic_inventory"> </span>
+          <b>Add Definitions</b> <span className="sub_topic_inventory"> </span>
         </h1>
 
         <div className="item_full_box">
