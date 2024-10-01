@@ -39,49 +39,61 @@ function Translator() {
 
     const handleTranslate = () => {
         setLoading(true);
-        setError(null); // Reset error state
-
-        // Check for idioms in the input text and replace them first
-        let translatedText = fromText;
-        for (const [idiom, translation] of Object.entries(idioms)) {
-            const regex = new RegExp(`\\b${idiom}\\b`, 'gi'); // Match whole words
-            translatedText = translatedText.replace(regex, translation);
-        }
-
-        // If idioms were replaced, set the output text directly
-        if (translatedText !== fromText) {
-            setToText(translatedText);
-            setLoading(false);
-            saveTranslation(fromText, translatedText);
-            return; // Exit if no translation API call is needed
-        }
-
-        // Call your translation API if needed after replacing idioms
-        let url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(translatedText) + '&langpair=' + fromLanguage + '|' + toLanguage;
-
-        fetch(url)
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
+        setError(null);
+    
+        
+        let sentences = fromText.match(/[^.!?]+[.!?]*/g) || [];
+    
+        let translatedSentences = sentences.map((sentence) => {
+            
+            let foundIdiom = false;
+            let translatedSentence = sentence;
+    
+            for (const [idiom, translation] of Object.entries(idioms)) {
+                const regex = new RegExp(`\\b${idiom}\\b`, 'gi'); 
+                if (regex.test(sentence)) {
+                    translatedSentence = sentence.replace(regex, translation);
+                    foundIdiom = true;
+                    break; 
                 }
-                return res.json();
-            })
-            .then((data) => {
-                // If API returns a translated text, use it
-                if (data.responseData.translatedText) {
-                    setToText(data.responseData.translatedText);
-                    saveTranslation(fromText, data.responseData.translatedText);
-                } else {
-                    setToText(translatedText); // Fallback to idiom-translated text if no API response
-                    saveTranslation(fromText, translatedText);
-                }
+            }
+    
+            
+            if (foundIdiom) {
+                return Promise.resolve(translatedSentence);
+            }
+    
+            
+            let url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(sentence) + '&langpair=' + fromLanguage + '|' + toLanguage;
+    
+            return fetch(url)
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    return data.responseData.translatedText || sentence;
+                })
+                .catch((err) => {
+                    setError(err.message); 
+                    return sentence; 
+                });
+        });
+    
+        
+        Promise.all(translatedSentences)
+            .then((translatedArray) => {
+                setToText(translatedArray.join(' ')); 
                 setLoading(false);
             })
             .catch((err) => {
-                setError(err.message);
+                setError('Error translating the text');
                 setLoading(false);
             });
     };
+    
 
     const handleIconClick = (target, id) => {
         if (!fromText || !toText) return;
