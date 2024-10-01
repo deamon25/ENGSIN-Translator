@@ -134,65 +134,79 @@ function Translator() {
 
     return (
         <>
-            <div className="custom-wrapper">
-                <div className="custom-text-input">
-                    <textarea
-                        name="from"
-                        className="custom-from-text"
-                        placeholder="Enter Text"
-                        id="from"
-                        value={fromText}
-                        onChange={(e) => setFromText(e.target.value)}
-                    />
-                    <textarea
-                        name="to"
-                        className="custom-to-text"
-                        id="to"
-                        value={toText}
-                        readOnly
-                    />
+            <div className="flex items-center justify-center min-h-screen bg-[#e7f2f8]">
+    <div className="max-w-xl w-full bg-white rounded-xl p-8 shadow-xl">
+        <div className="flex border-b border-gray-300">
+            <textarea
+                name="from"
+                className="w-full h-64 border-none rounded-tl-xl p-4 text-lg placeholder-gray-400"
+                placeholder="Enter Text"
+                id="from"
+                value={fromText}
+                onChange={(e) => setFromText(e.target.value)}
+            />
+            <textarea
+                name="to"
+                className="w-full h-64 border-none rounded-tr-xl p-4 text-lg bg-gray-50 border-l border-gray-300"
+                id="to"
+                value={toText}
+                readOnly
+            />
+        </div>
+        <ul className="flex justify-between items-center mt-4 space-x-4">
+            <li className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                    <i id="from" className="fa-solid fa-volume-high text-gray-500 cursor-pointer" onClick={(e) => handleIconClick(e.target, 'from')}></i>
+                    <i id="from" className="fa-solid fa-copy text-gray-500 cursor-pointer" onClick={(e) => handleIconClick(e.target, 'from')}></i>
+                    <i
+                        id="from-mic"
+                        className={`fa fa-microphone cursor-pointer ${listening ? 'text-black animate-pulse' : 'text-gray-500'}`}
+                        onClick={() => setListening(!listening)}
+                    ></i>
                 </div>
-                <ul className="custom-controls">
-                    <li className="custom-row from">
-                        <div className="custom-icons">
-                            <i id="from" className="fa-solid fa-volume-high" onClick={(e) => handleIconClick(e.target, 'from')}></i>
-                            <i id="from" className="fa-solid fa-copy" onClick={(e) => handleIconClick(e.target, 'from')}></i>
-                            <i
-                                id="from-mic"
-                                className={`fa fa-microphone ${listening ? 'mic-listening' : ''}`}
-                                onClick={() => setListening(!listening)}
-                            ></i>
-                        </div>
-                        <select value={fromLanguage} onChange={(e) => setFromLanguage(e.target.value)}>
-                            {Object.entries(languages).map(([code, name]) => (
-                                <option key={code} value={code}>
-                                    {name}
-                                </option>
-                            ))}
-                        </select>
-                    </li>
-                    <li className="custom-exchange" onClick={handleExchange}>
-                        <i className="fa-solid fa-arrow-right-arrow-left"></i>
-                    </li>
-                    <li className="custom-row to">
-                        <select value={toLanguage} onChange={(e) => setToLanguage(e.target.value)}>
-                            {Object.entries(languages).map(([code, name]) => (
-                                <option key={code} value={code}>
-                                    {name}
-                                </option>
-                            ))}
-                        </select>
-                        <div className="custom-icons">
-                            <i id="to" className="fa-solid fa-copy" onClick={(e) => handleIconClick(e.target, 'to')}></i>
-                            <i id="to" className="fa-solid fa-volume-high" onClick={(e) => handleIconClick(e.target, 'to')}></i>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            {error && <div className="custom-error">{error}</div>}
-            <button onClick={handleTranslate} disabled={loading}>
-                {loading ? 'Translating...' : 'Translate Text'}
-            </button>
+                <select
+                    value={fromLanguage}
+                    onChange={(e) => setFromLanguage(e.target.value)}
+                    className="border-none outline-none text-lg p-2"
+                >
+                    {Object.entries(languages).map(([code, name]) => (
+                        <option key={code} value={code}>
+                            {name}
+                        </option>
+                    ))}
+                </select>
+            </li>
+            <li className="cursor-pointer" onClick={handleExchange}>
+                <i className="fa-solid fa-arrow-right-arrow-left text-xl text-gray-500"></i>
+            </li>
+            <li className="flex items-center space-x-4">
+                <select
+                    value={toLanguage}
+                    onChange={(e) => setToLanguage(e.target.value)}
+                    className="border-none outline-none text-lg p-2"
+                >
+                    {Object.entries(languages).map(([code, name]) => (
+                        <option key={code} value={code}>
+                            {name}
+                        </option>
+                    ))}
+                </select>
+                <div className="flex items-center space-x-2">
+                    <i id="to" className="fa-solid fa-copy text-gray-500 cursor-pointer" onClick={(e) => handleIconClick(e.target, 'to')}></i>
+                    <i id="to" className="fa-solid fa-volume-high text-gray-500 cursor-pointer" onClick={(e) => handleIconClick(e.target, 'to')}></i>
+                </div>
+            </li>
+        </ul>
+        {error && <div className="text-red-500 text-sm mt-4">{error}</div>}
+        <button
+            onClick={handleTranslate}
+            disabled={loading}
+            className="w-full py-3 mt-6 bg-blue-500 text-white rounded-md text-lg hover:bg-blue-600 disabled:bg-blue-300"
+        >
+            {loading ? 'Translating...' : 'Translate Text'}
+        </button>
+    </div>
+</div>
         </>
     );
 }
