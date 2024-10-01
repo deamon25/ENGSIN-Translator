@@ -7,8 +7,15 @@ import StarRating from "../StarRating"; // Import the StarRating component
 const URL = "http://localhost:5000/inventory";
 
 const fetchHandler = async () => {
-  return await axios.get(URL).then((res) => res.data);
+  try {
+    const res = await axios.get(URL);
+    console.log("Fetched data from server:", res.data); // Debugging: Check the format of data
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching data:", err);
+  }
 };
+
 
 function DashBoard() {
   const [inven, setInven] = useState([]);

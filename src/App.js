@@ -31,14 +31,14 @@ function App() {
           <Route path="/reset/:token" element={<Reset/>} /> 
           <Route path="/recover" element={<Recovery/>} />
           <Route path="/profile" element={<Profile/>} />
-          
-          <Route path="/history" element={<TranslationHistory/>} />
           <Route path="/additem" element={<Additem />} />
       
           <Route path="/updateitem/:id" element={<UpdateItem />} />
       
           <Route path="/userdetailsdash" element={<DetailsDash />} />
           <Route path="/dashbord" element={<DashBoard />} />
+          
+          <Route path="/history" element={<TranslationHistory/>} />
 
 
           <Route path="/admindash" element={<AdminDash />} />

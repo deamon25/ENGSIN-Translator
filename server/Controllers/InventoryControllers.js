@@ -13,29 +13,26 @@ const getAllInventory = async (req, res, next) => {
   return res.status(200).json({ inven });
 };
 
-const addInventory = async (req, res, next) => {
-  const { word, definition, username, price, date, imgurl, rating } = req.body;
-
-  let inven;
+const addInventory = async (req, res) => {
   try {
-    inven = new Inventory({
+    const { date, word, definition, username } = req.body;
+
+   
+
+    const newInventory = new Inventory({
+      date,
       word,
       definition,
       username,
-      price,
-      date,
-      imgurl,
-      rating: rating || 0, // Include the rating field
     });
-    await inven.save();
-  } catch (err) {
-    console.log(err);
+
+    const savedInventory = await newInventory.save();
+    res.status(201).json(savedInventory);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to add inventory", error });
   }
-  if (!inven) {
-    return res.status(404).json({ message: "Unable to add Inventory" });
-  }
-  return res.status(200).json({ inven });
 };
+
 
 const getById = async (req, res, next) => {
   const id = req.params.id;

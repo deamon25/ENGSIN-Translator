@@ -22,13 +22,18 @@ function Additem() {
       try {
         const response = await axios.get(`http://localhost:5000/api/users/${id}`);
         setUser(response.data);
+        // Set the username (firstName) directly in the inputs state
+        setInputs((prevInputs) => ({
+          ...prevInputs,
+          username: response.data.firstName || "", // Set username from fetched user data
+        }));
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch user data");
         setLoading(false);
       }
     };
-
+    
     if (paramUserId) {
       // Admin is viewing someone else's profile
       setUserId(paramUserId);

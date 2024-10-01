@@ -13,19 +13,11 @@ const InventorySchema = new Schema({
   },
   username: {
     type: String,
-    required: true,
-  },
-  price: {
-    type: String,
-    required: false,
+    
   },
   date: {
     type: String,
     required: true,
-  },
-  imgurl: {
-    type: String,
-    required: false,
   },
   rating: {
     type: Number,

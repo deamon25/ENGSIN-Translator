@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Library to decode JWT
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import "../Admin.css";
@@ -27,7 +27,7 @@ function RatingComponent({ rating, onRatingChange }) {
 }
 
 function UpdateItem() {
-  const { userId: paramUserId } = useParams();// Get userId from the URL if passed
+  const { userId: paramUserId } = useParams(); // Get userId from the URL if passed
   const [userId, setUserId] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -93,7 +93,7 @@ function UpdateItem() {
   }, [id]);
 
   const sendRequest = async () => {
-    await axios.put(`http://localhost:5001/inventory/${id}`, {
+    await axios.put(`http://localhost:5000/inventory/${id}`, {
       date: String(inputs.date),
       word: String(inputs.word),
       definition: String(inputs.definition),
@@ -120,6 +120,9 @@ function UpdateItem() {
     navigate("/"); // Navigate back to the dashboard
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <div>
       <div className="children_div_admin">
@@ -132,7 +135,7 @@ function UpdateItem() {
             <input
               className="form_box_item_input"
               type="text"
-              value={user.firstName}
+              value={user ? user.firstName : ''} // Check if user exists
               name="username"
               readOnly
               style={{ width: "50%", height: "30px", fontSize: "16px" }}
