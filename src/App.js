@@ -8,6 +8,7 @@ import Reset from './components/UserManagement/User/Reset';
 import User_login from './components/UserManagement/User/User_login';
 import User_signup from './components/UserManagement/User/User_signup';
 import Usermanage from './components/UserManagement/User/Usermanage';
+import TranslationHistory from './components/History/History';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/profile" element={<Profile/>} />
           {/*<Route path="/" element={<><TopNav/></>} />*/}
           
+          <Route path="/history" element={<TranslationHistory/>} />
 
 
           <Route path="/admindash" element={<AdminDash />} />

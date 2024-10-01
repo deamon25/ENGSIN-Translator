@@ -25,6 +25,29 @@ const TranslationHistory = () => {
     fetchHistory();
   }, []);
 
+  // Handle deleting a translation
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this translation?');
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/translations/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete translation');
+      }
+
+      // Remove the deleted translation from the state
+      setTranslationHistory((prevHistory) =>
+        prevHistory.filter((entry) => entry._id !== id)
+      );
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   if (loading) {
     return <div className="text-gray-200">Loading translation history...</div>;
   }
@@ -58,7 +81,8 @@ const TranslationHistory = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                       <button
                         type="button"
-                        className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none"
+                        className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-red-600 hover:text-red-800 focus:outline-none focus:text-red-800"
+                        onClick={() => handleDelete(entry._id)}
                       >
                         Delete
                       </button>

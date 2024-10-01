@@ -16,6 +16,8 @@ function Translator() {
     useEffect(() => {
         setLanguages(lang);
     }, []);
+    
+    
 
     const copyContent = (text) => {
         navigator.clipboard.writeText(text);
@@ -47,7 +49,7 @@ function Translator() {
     const handleTranslate = () => {
         setLoading(true);
         setError(null); // Reset error state
-
+        
         // Check for idioms in the input text and replace them first
         let translatedText = fromText;
         for (const [idiom, translation] of Object.entries(idioms)) {
@@ -59,6 +61,7 @@ function Translator() {
         if (translatedText !== fromText) {
             setToText(translatedText);
             setLoading(false);
+            saveTranslation(fromText, translatedText);
             return; // Exit if no translation API call is needed
         }
 
@@ -76,10 +79,15 @@ function Translator() {
                 // If API returns a translated text, use it
                 if (data.responseData.translatedText) {
                     setToText(data.responseData.translatedText);
+                    // Save to the backend after translation is successful
+                    saveTranslation(fromText, data.responseData.translatedText);
                 } else {
                     setToText(translatedText); // Fallback to the idiom translated text if no API response
+                    saveTranslation(fromText, translatedText); // Save fallback translation
                 }
                 setLoading(false);
+
+               
             })
             .catch((err) => {
                 setError(err.message); // Handle errors
@@ -125,6 +133,22 @@ function Translator() {
 
         return () => recognition.stop(); // Cleanup on component unmount or listening change
     }, [listening, fromLanguage]);
+
+   
+
+    // Save translation to the backend
+  const saveTranslation = async (fromText, toText) => {
+    console.log('Saving translation:', { fromText, toText }); // Add this line to debug
+    await fetch('http://localhost:5000/api/translations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ fromText, toText }),
+    });
+  };
+
+    
 
     return (
         <>
