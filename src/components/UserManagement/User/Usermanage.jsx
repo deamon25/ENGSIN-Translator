@@ -46,7 +46,7 @@ const UserManage = () => {
 
         // Perform delete operation if user confirms
         try {
-            const response = await fetch(`http://localhost:5050/api/users/${id}`, {
+            const response = await fetch(`http://localhost:5000/api/users/${id}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {
