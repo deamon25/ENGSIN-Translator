@@ -1,4 +1,6 @@
 import axios from "axios";
+import Cookies from 'js-cookie';
+import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import "../Admin.css";
@@ -25,6 +27,53 @@ function RatingComponent({ rating, onRatingChange }) {
 }
 
 function UpdateItem() {
+  const { userId: paramUserId } = useParams();// Get userId from the URL if passed
+  const [userId, setUserId] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  function getCookie(name) {
+    return Cookies.get(name);
+  }
+
+  useEffect(() => {
+    const fetchUserData = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/${id}`);
+        setUser(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch user data");
+        setLoading(false);
+      }
+    };
+
+    if (paramUserId) {
+      // Admin is viewing someone else's profile
+      setUserId(paramUserId);
+      fetchUserData(paramUserId);
+    } else {
+      // Regular user viewing their own profile
+      const jwtToken = getCookie('jwt');
+      if (!jwtToken) {
+        setError("Token not found. Please log in.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const decodedToken = jwtDecode(jwtToken);
+        const user_id = decodedToken.id;
+        setUserId(user_id);
+        fetchUserData(user_id);
+      } catch (e) {
+        setError("Invalid token");
+        setLoading(false);
+      }
+    }
+  }, [paramUserId]);
+
   const [inputs, setInputs] = useState({});
   const [rating, setRating] = useState(0); // State for rating
   const navigate = useNavigate();
@@ -83,7 +132,7 @@ function UpdateItem() {
             <input
               className="form_box_item_input"
               type="text"
-              value={inputs.username}
+              value={user.firstName}
               name="username"
               readOnly
               style={{ width: "50%", height: "30px", fontSize: "16px" }}

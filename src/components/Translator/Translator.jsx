@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import lang from '../../languages';
-import './style/trans.css';
-
+import idioms from './idioms';
+import lang from './languages';
 
 function Translator() {
     const [fromText, setFromText] = useState('');
@@ -37,51 +36,54 @@ function Translator() {
         setToLanguage(tempLang);
     };
 
-    const idioms = {
-        "it's raining cats and dogs": "බර වැසි වැටෙනවා",
-        "break a leg": "සාර්ථක වන්න",
-        // Add more idioms as needed
-    };
-
     const handleTranslate = () => {
         setLoading(true);
-        setError(null); // Reset error state
+        setError(null);
+    
+        let sentences = fromText.match(/[^.!?]+[.!?]*/g) || [];
+    
+        let translatedSentences = sentences.map((sentence) => {
+            let foundIdiom = false;
+            let translatedSentence = sentence;
 
-        // Check for idioms in the input text and replace them first
-        let translatedText = fromText;
-        for (const [idiom, translation] of Object.entries(idioms)) {
-            const regex = new RegExp(`\\b${idiom}\\b`, 'gi'); // Match whole words
-            translatedText = translatedText.replace(regex, translation);
-        }
-
-        // If idioms were replaced, set the output text directly
-        if (translatedText !== fromText) {
-            setToText(translatedText);
-            setLoading(false);
-            return; // Exit if no translation API call is needed
-        }
-
-        // Call your translation API if needed after replacing idioms
-        let url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(translatedText) + '&langpair=' + fromLanguage + '|' + toLanguage;
-
-        fetch(url)
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
+            for (const [idiom, translation] of Object.entries(idioms)) {
+                const regex = new RegExp(`\\b${idiom}\\b`, 'gi'); 
+                if (regex.test(sentence)) {
+                    translatedSentence = sentence.replace(regex, translation);
+                    foundIdiom = true;
+                    break; 
                 }
-                return res.json();
-            })
-            .then((data) => {
-                // If API returns a translated text, use it
-                if (data.responseData.translatedText) {
-                    setToText(data.responseData.translatedText);
-                } else {
-                    setToText(translatedText); // Fallback to the idiom translated text if no API response
-                }
+            }
+
+            if (foundIdiom) {
+                return Promise.resolve(translatedSentence);
+            }
+
+            let url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(sentence) + '&langpair=' + fromLanguage + '|' + toLanguage;
+    
+            return fetch(url)
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    return data.responseData.translatedText || sentence;
+                })
+                .catch((err) => {
+                    setError(err.message); 
+                    return sentence; 
+                });
+        });
+    
+        Promise.all(translatedSentences)
+            .then((translatedArray) => {
+                setToText(translatedArray.join(' ')); 
                 setLoading(false);
             })
             .catch((err) => {
-                setError(err.message); // Handle errors
+                setError('Error translating the text');
                 setLoading(false);
             });
     };
@@ -106,11 +108,11 @@ function Translator() {
 
     return (
         <>
-            <div className="wrapper">
-                <div className="text-input">
+            <div className="custom-wrapper">
+                <div className="custom-text-input">
                     <textarea 
                         name="from" 
-                        className="from-text" 
+                        className="custom-from-text" 
                         placeholder="Enter Text" 
                         id="from" 
                         value={fromText} 
@@ -118,15 +120,15 @@ function Translator() {
                     />
                     <textarea 
                         name="to" 
-                        className="to-text" 
+                        className="custom-to-text" 
                         id="to" 
                         value={toText} 
                         readOnly
                     />
                 </div>
-                <ul className="controls">
-                    <li className="row from">
-                        <div className="icons">
+                <ul className="custom-controls">
+                    <li className="custom-row from">
+                        <div className="custom-icons">
                             <i id="from" className="fa-solid fa-volume-high" onClick={(e) => handleIconClick(e.target, 'from')}></i>
                             <i id="from" className="fa-solid fa-copy" onClick={(e) => handleIconClick(e.target, 'from')}></i>
                         </div>
@@ -138,10 +140,10 @@ function Translator() {
                             ))}
                         </select>
                     </li>
-                    <li className="exchange" onClick={handleExchange}>
+                    <li className="custom-exchange" onClick={handleExchange}>
                         <i className="fa-solid fa-arrow-right-arrow-left"></i>
                     </li>
-                    <li className="row to">
+                    <li className="custom-row to">
                         <select value={toLanguage} onChange={(e) => setToLanguage(e.target.value)}>
                             {Object.entries(languages).map(([code, name]) => (
                                 <option key={code} value={code}>
@@ -149,14 +151,14 @@ function Translator() {
                                 </option>
                             ))}
                         </select>
-                        <div className="icons">
+                        <div className="custom-icons">
                             <i id="to" className="fa-solid fa-copy" onClick={(e) => handleIconClick(e.target, 'to')}></i>
                             <i id="to" className="fa-solid fa-volume-high" onClick={(e) => handleIconClick(e.target, 'to')}></i>
                         </div>
                     </li>
                 </ul>
             </div>
-            {error && <div className="error">{error}</div>} {/* Display error if exists */}
+            {error && <div className="custom-error">{error}</div>} {/* Display error if exists */}
             <button onClick={handleTranslate} disabled={loading}>
                 {loading ? 'Translating...' : 'Translate Text'}
             </button>
