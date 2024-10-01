@@ -15,8 +15,6 @@ function Translator() {
     useEffect(() => {
         setLanguages(lang);
     }, []);
-    
-    
 
     const copyContent = (text) => {
         navigator.clipboard.writeText(text);
@@ -42,7 +40,7 @@ function Translator() {
     const handleTranslate = () => {
         setLoading(true);
         setError(null); // Reset error state
-        
+
         // Check for idioms in the input text and replace them first
         let translatedText = fromText;
         for (const [idiom, translation] of Object.entries(idioms)) {
@@ -72,59 +70,15 @@ function Translator() {
                 // If API returns a translated text, use it
                 if (data.responseData.translatedText) {
                     setToText(data.responseData.translatedText);
-                    // Save to the backend after translation is successful
                     saveTranslation(fromText, data.responseData.translatedText);
                 } else {
-                    setToText(translatedText); // Fallback to the idiom translated text if no API response
-                    saveTranslation(fromText, translatedText); // Save fallback translation
-        setError(null);
-    
-        let sentences = fromText.match(/[^.!?]+[.!?]*/g) || [];
-    
-        let translatedSentences = sentences.map((sentence) => {
-            let foundIdiom = false;
-            let translatedSentence = sentence;
-
-            for (const [idiom, translation] of Object.entries(idioms)) {
-                const regex = new RegExp(`\\b${idiom}\\b`, 'gi'); 
-                if (regex.test(sentence)) {
-                    translatedSentence = sentence.replace(regex, translation);
-                    foundIdiom = true;
-                    break; 
+                    setToText(translatedText); // Fallback to idiom-translated text if no API response
+                    saveTranslation(fromText, translatedText);
                 }
-            }
-
-            if (foundIdiom) {
-                return Promise.resolve(translatedSentence);
-            }
-
-            let url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(sentence) + '&langpair=' + fromLanguage + '|' + toLanguage;
-    
-            return fetch(url)
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return res.json();
-                })
-                .then((data) => {
-                    return data.responseData.translatedText || sentence;
-                })
-                .catch((err) => {
-                    setError(err.message); 
-                    return sentence; 
-                });
-        });
-    
-        Promise.all(translatedSentences)
-            .then((translatedArray) => {
-                setToText(translatedArray.join(' ')); 
                 setLoading(false);
-
-               
             })
             .catch((err) => {
-                setError('Error translating the text');
+                setError(err.message);
                 setLoading(false);
             });
     };
@@ -147,7 +101,6 @@ function Translator() {
         }
     };
 
-    // Handle speech recognition and transcription
     const handleSpeechToText = (speechText) => {
         setFromText(speechText);
     };
@@ -168,39 +121,34 @@ function Translator() {
         return () => recognition.stop(); // Cleanup on component unmount or listening change
     }, [listening, fromLanguage]);
 
-   
-
-    // Save translation to the backend
-  const saveTranslation = async (fromText, toText) => {
-    console.log('Saving translation:', { fromText, toText }); // Add this line to debug
-    await fetch('http://localhost:5000/api/translations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ fromText, toText }),
-    });
-  };
-
-    
+    const saveTranslation = async (fromText, toText) => {
+        console.log('Saving translation:', { fromText, toText });
+        await fetch('http://localhost:5000/api/translations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ fromText, toText }),
+        });
+    };
 
     return (
         <>
             <div className="custom-wrapper">
                 <div className="custom-text-input">
-                    <textarea 
-                        name="from" 
-                        className="custom-from-text" 
-                        placeholder="Enter Text" 
-                        id="from" 
-                        value={fromText} 
+                    <textarea
+                        name="from"
+                        className="custom-from-text"
+                        placeholder="Enter Text"
+                        id="from"
+                        value={fromText}
                         onChange={(e) => setFromText(e.target.value)}
                     />
-                    <textarea 
-                        name="to" 
-                        className="custom-to-text" 
-                        id="to" 
-                        value={toText} 
+                    <textarea
+                        name="to"
+                        className="custom-to-text"
+                        id="to"
+                        value={toText}
                         readOnly
                     />
                 </div>
@@ -209,9 +157,9 @@ function Translator() {
                         <div className="custom-icons">
                             <i id="from" className="fa-solid fa-volume-high" onClick={(e) => handleIconClick(e.target, 'from')}></i>
                             <i id="from" className="fa-solid fa-copy" onClick={(e) => handleIconClick(e.target, 'from')}></i>
-                            <i 
-                                id="from-mic" 
-                                className={`fa fa-microphone ${listening ? 'mic-listening' : ''}`} 
+                            <i
+                                id="from-mic"
+                                className={`fa fa-microphone ${listening ? 'mic-listening' : ''}`}
                                 onClick={() => setListening(!listening)}
                             ></i>
                         </div>
@@ -241,7 +189,7 @@ function Translator() {
                     </li>
                 </ul>
             </div>
-            {error && <div className="custom-error">{error}</div>} {/* Display error if exists */}
+            {error && <div className="custom-error">{error}</div>}
             <button onClick={handleTranslate} disabled={loading}>
                 {loading ? 'Translating...' : 'Translate Text'}
             </button>
