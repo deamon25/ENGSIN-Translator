@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import lang from '../languages';
+import './mic.css';
 
 function Translator() {
     const [fromText, setFromText] = useState('');
@@ -9,6 +10,7 @@ function Translator() {
     const [languages, setLanguages] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [listening, setListening] = useState(false); // New state for listening
 
     useEffect(() => {
         setLanguages(lang);
@@ -102,6 +104,27 @@ function Translator() {
         }
     };
 
+    // Handle speech recognition and transcription
+    const handleSpeechToText = (speechText) => {
+        setFromText(speechText);
+    };
+
+    useEffect(() => {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = fromLanguage;
+        if (listening) {
+            recognition.start();
+            recognition.onresult = (event) => {
+                const speechToText = event.results[0][0].transcript;
+                handleSpeechToText(speechToText);
+            };
+        } else {
+            recognition.stop();
+        }
+
+        return () => recognition.stop(); // Cleanup on component unmount or listening change
+    }, [listening, fromLanguage]);
+
     return (
         <>
             <div className="wrapper">
@@ -127,6 +150,11 @@ function Translator() {
                         <div className="icons">
                             <i id="from" className="fa-solid fa-volume-high" onClick={(e) => handleIconClick(e.target, 'from')}></i>
                             <i id="from" className="fa-solid fa-copy" onClick={(e) => handleIconClick(e.target, 'from')}></i>
+                            <i 
+                                id="from-mic" 
+                                className={`fa fa-microphone ${listening ? 'mic-listening' : ''}`} 
+                                onClick={() => setListening(!listening)}
+                            ></i>
                         </div>
                         <select value={fromLanguage} onChange={(e) => setFromLanguage(e.target.value)}>
                             {Object.entries(languages).map(([code, name]) => (

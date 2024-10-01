@@ -1,0 +1,17 @@
+.mic-listening {
+    color: black;
+    animation: pulse 1s infinite;
+     /* Optional: Change the color to indicate it's active */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2); /* Make the icon grow slightly */
+    }
+    100% {
+        transform: scale(1);
+    }
+}
