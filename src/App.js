@@ -8,6 +8,7 @@ import TranslationHistory from './components/History/History';
 import './components/Translator/trans.css';
 import Translator from './components/Translator/Translator';
 import AdminDash from './components/UserManagement/Admin/AdminDash';
+import TopNav from './components/UserManagement/topNav';
 import Profile from './components/UserManagement/User/Profile';
 import Recovery from './components/UserManagement/User/Recovery';
 import Reset from './components/UserManagement/User/Reset';
@@ -25,7 +26,7 @@ function App() {
       <Route path="/" element={<Translator />} />
       <Route path="/update-item" element={<UpdateItem />} />
      
-
+        <Route path="/" element={<><TopNav/></>} />
          <Route path="/login" element={<User_login />} /> {/* New route for user login */}
           <Route path="/signup" element={<User_signup />} /> {/* New route for user signup */}
           <Route path="/reset/:token" element={<Reset/>} /> 
