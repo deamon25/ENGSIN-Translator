@@ -52,6 +52,14 @@ function TopNav() {
       console.error('Error occurred during password reset:', err);
     })
   }
+  // New function to navigate to the History page
+  const handleHistoryNavigation = () => {
+    navigate('/history'); // Update with the correct route for the History page
+  }
+
+  const handleHomeNavigation = () => {
+    navigate('/'); // Update with the correct route for the History page
+  }
 
   return (
     <>
@@ -139,14 +147,14 @@ function TopNav() {
             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-40 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
               {/* main navigation sections*/}
               <li>
-                <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-gray-900 md:dark:hover:text-primary">
+                <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-gray-900 md:dark:hover:text-primary" onClick={handleHomeNavigation}>
                   Home
                 </a>
               </li>
               
 
               {/* the rest of main navigation links*/}
-              <li><a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-gray-900 md:dark:hover:bg-transparent">History</a></li>
+              <li><a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-gray-900 md:dark:hover:bg-transparent" onClick={handleHistoryNavigation}>History</a></li>
               <li><a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-gray-900 md:dark:hover:bg-transparent">Profile</a></li>
             </ul>
           </div>

@@ -14,6 +14,8 @@ import User_login from './components/UserManagement/User/User_login';
 import User_signup from './components/UserManagement/User/User_signup';
 import Usermanage from './components/UserManagement/User/Usermanage';
 import TranslationHistory from './components/History/History';
+import TopNav from './components/UserManagement/topNav';
+import Navbar from './components/UserManagement/Navbar';
 
 
 function App() {
@@ -22,7 +24,9 @@ function App() {
     <div className="container">
 
       <Routes>
-      <Route path="/" element={<Translator />} />
+      <Route path="/" element={<> <TopNav/> <Translator /></>} />
+      <Route path="/topnav" element={<TopNav />} />
+      <Route path="/nav" element={<Navbar />} />
       <Route path="/additem" element={<Additem />} />
       
           <Route path="/updateitem/:id" element={<UpdateItem />} />
@@ -37,7 +41,7 @@ function App() {
           <Route path="/recover" element={<Recovery/>} />
           <Route path="/profile" element={<Profile/>} />
           
-          <Route path="/history" element={<TranslationHistory/>} />
+          <Route path="/history" element={<><TopNav/> <TranslationHistory/></>} />
 
 
           <Route path="/admindash" element={<AdminDash />} />
