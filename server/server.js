@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const  UserRouter  = require("./routes/user");
 const bodyParser = require("body-parser");
+const InventoryRoute = require("./routes/InventoryRoutes");
 const path = require('path');
 require('dotenv').config();
 
@@ -29,6 +30,8 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.json());
 app.use('/auth', UserRouter);
 app.use('/api/users', UserRouter);
+app.use("/inventory", InventoryRoute);
+
 
 
 // Connect to MongoDB
