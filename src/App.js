@@ -4,7 +4,7 @@ import Additem from "./components/Definitions/Admin/AddItem/Additem";
 import DashBoard from "./components/Definitions/Admin/DashBoard/DashBoard";
 import UpdateItem from "./components/Definitions/Admin/UpdateItem/UpdateItem";
 import DetailsDash from "./components/Definitions/User/DetailsDash/DetailsDash";
-import './components/Translator/trans.css';
+//import './components/Translator/trans.css';
 import Translator from './components/Translator/Translator';
 import AdminDash from './components/UserManagement/Admin/AdminDash';
 import Profile from './components/UserManagement/User/Profile';
@@ -23,7 +23,12 @@ function App() {
 
       <Routes>
       <Route path="/" element={<Translator />} />
-      <Route path="/update-item" element={<UpdateItem />} />
+      <Route path="/additem" element={<Additem />} />
+      
+          <Route path="/updateitem/:id" element={<UpdateItem />} />
+      
+          <Route path="/userdetailsdash" element={<DetailsDash />} />
+          <Route path="/dashbord" element={<DashBoard />} />
      
 
          <Route path="/login" element={<User_login />} /> {/* New route for user login */}
