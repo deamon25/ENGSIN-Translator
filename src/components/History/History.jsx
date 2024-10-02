@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const TranslationHistory = () => {
   const [translationHistory, setTranslationHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredHistory, setFilteredHistory] = useState([]);
 
   // Fetch translation history from the backend
   useEffect(() => {
@@ -15,6 +19,7 @@ const TranslationHistory = () => {
         }
         const data = await response.json();
         setTranslationHistory(data);
+        setFilteredHistory(data); // Initialize filtered history
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -24,6 +29,17 @@ const TranslationHistory = () => {
 
     fetchHistory();
   }, []);
+
+  useEffect(() => {
+    // Filter translation history based on search term
+    const filtered = translationHistory.filter(entry => {
+      return (
+        entry.inputText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        entry.translatedText.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setFilteredHistory(filtered);
+  }, [searchTerm, translationHistory]);
 
   // Handle deleting a translation
   const handleDelete = async (id) => {
@@ -43,9 +59,52 @@ const TranslationHistory = () => {
       setTranslationHistory((prevHistory) =>
         prevHistory.filter((entry) => entry._id !== id)
       );
+      setFilteredHistory((prevFiltered) =>
+        prevFiltered.filter((entry) => entry._id !== id)
+      );
     } catch (err) {
       setError(err.message);
     }
+  };
+
+  const handleDeleteAll = async () => {
+    const confirmDeleteAll = window.confirm('Are you sure you want to delete all translation history?');
+    if (!confirmDeleteAll) return;
+
+    try {
+      const response = await fetch('http://localhost:5000/api/translations', {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete all translations');
+      }
+
+      // Clear the state
+      setTranslationHistory([]);
+      setFilteredHistory([]);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const downloadReport = () => {
+    const doc = new jsPDF();
+    doc.text('Translation History Report', 15, 18);
+
+    const headers = ['Input Text', 'Translated Text', 'Date'];
+    const data = filteredHistory.map(entry => [
+      entry.inputText,
+      entry.translatedText,
+      new Date(entry.createdAt).toLocaleString(),
+    ]);
+
+    doc.autoTable({
+      head: [headers],
+      body: data,
+    });
+
+    doc.save('translationHistoryReport.pdf');
   };
 
   if (loading) {
@@ -57,7 +116,25 @@ const TranslationHistory = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-[1280px] mx-auto my-6">
+      <div className="flex mb-10 justify-between">
+        <h1 className="text-2xl font-semibold leading-7 text-dark">Translation History</h1>
+        <div className="flex">
+          <input
+            type="text"
+            placeholder="Search by input or translated text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border rounded-md px-2 py-1"
+          />
+          <button onClick={downloadReport} className="text-sm font-medium rounded-lg text-dark hover:bg-gray-200 p-2 px-3 flex mx-2">
+            Download Report
+          </button>
+          <button onClick={handleDeleteAll} className="text-sm font-medium rounded-lg bg-red-600 hover:bg-red-700 text-white p-2">
+            Delete All History
+          </button>
+        </div>
+      </div>
       <div className="-m-1.5 overflow-x-auto">
         <div className="p-1.5 min-w-full inline-block align-middle">
           <div className="overflow-hidden">
@@ -71,7 +148,7 @@ const TranslationHistory = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {translationHistory.map((entry) => (
+                {filteredHistory.map((entry) => (
                   <tr key={entry._id} className="hover:bg-gray-100">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{entry.inputText}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{entry.translatedText}</td>

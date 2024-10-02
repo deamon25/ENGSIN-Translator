@@ -5,7 +5,6 @@ import DashBoard from "./components/Definitions/Admin/DashBoard/DashBoard";
 import UpdateItem from "./components/Definitions/Admin/UpdateItem/UpdateItem";
 import DetailsDash from "./components/Definitions/User/DetailsDash/DetailsDash";
 import TranslationHistory from './components/History/History';
-import './components/Translator/trans.css';
 import Translator from './components/Translator/Translator';
 import AdminDash from './components/UserManagement/Admin/AdminDash';
 import TopNav from './components/UserManagement/topNav';
@@ -15,6 +14,10 @@ import Reset from './components/UserManagement/User/Reset';
 import User_login from './components/UserManagement/User/User_login';
 import User_signup from './components/UserManagement/User/User_signup';
 import Usermanage from './components/UserManagement/User/Usermanage';
+import TranslationHistory from './components/History/History';
+import TopNav from './components/UserManagement/topNav';
+import Navbar from './components/UserManagement/Navbar';
+
 
 
 function App() {
@@ -23,8 +26,15 @@ function App() {
     <div className="container">
 
       <Routes>
-      <Route path="/" element={<Translator />} />
-      <Route path="/update-item" element={<UpdateItem />} />
+      <Route path="/" element={<> <TopNav/> <Translator /></>} />
+      <Route path="/topnav" element={<TopNav />} />
+      <Route path="/nav" element={<Navbar />} />
+      <Route path="/additem" element={<Additem />} />
+      
+          <Route path="/updateitem/:id" element={<UpdateItem />} />
+      
+          <Route path="/userdetailsdash" element={<DetailsDash />} />
+          <Route path="/dashbord" element={<DashBoard />} />
      
         <Route path="/" element={<><TopNav/></>} />
          <Route path="/login" element={<User_login />} /> {/* New route for user login */}
@@ -39,7 +49,7 @@ function App() {
           <Route path="/userdetailsdash" element={<DetailsDash />} />
           <Route path="/dashbord" element={<DashBoard />} />
           
-          <Route path="/history" element={<TranslationHistory/>} />
+          <Route path="/history" element={<><TopNav/> <TranslationHistory/></>} />
 
 
           <Route path="/admindash" element={<AdminDash />} />
