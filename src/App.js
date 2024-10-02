@@ -14,8 +14,7 @@ import Reset from './components/UserManagement/User/Reset';
 import User_login from './components/UserManagement/User/User_login';
 import User_signup from './components/UserManagement/User/User_signup';
 import Usermanage from './components/UserManagement/User/Usermanage';
-import TranslationHistory from './components/History/History';
-import TopNav from './components/UserManagement/topNav';
+
 import Navbar from './components/UserManagement/Navbar';
 
 
