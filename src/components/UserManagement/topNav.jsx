@@ -60,7 +60,12 @@ function TopNav() {
   const handleHomeNavigation = () => {
     navigate('/'); // Update with the correct route for the History page
   }
-
+  const handleDefinition = () => {
+    navigate('/userdetailsdash'); // Update with the correct route for the History page
+  }
+  const handleProfile = () => {
+    navigate('/profile'); // Update with the correct route for the History page
+  }
   return (
     <>
       <nav className="bg-white border-gray-200 text-gray-900 shadow-lg">
@@ -119,7 +124,7 @@ function TopNav() {
                   </a>
                 </li>
                 <li>
-                  <a href="sout" className="block px-4 py-2 text-sm text-red-500">Sign out</a>
+                  <a href="/login" className="block px-4 py-2 text-sm text-red-500">Sign out</a>
                 </li>
               </ul>
             </div>
@@ -155,7 +160,8 @@ function TopNav() {
 
               {/* the rest of main navigation links*/}
               <li><a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-gray-900 md:dark:hover:bg-transparent" onClick={handleHistoryNavigation}>History</a></li>
-              <li><a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-gray-900 md:dark:hover:bg-transparent">Profile</a></li>
+              <li><a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-gray-900 md:dark:hover:bg-transparent" onClick={handleDefinition}>Definitions</a></li>
+              <li><a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-gray-900 md:dark:hover:bg-transparent" onClick={handleProfile}>Profile</a></li>
             </ul>
           </div>
         </div>

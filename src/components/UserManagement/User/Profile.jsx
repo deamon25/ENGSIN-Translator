@@ -101,7 +101,7 @@ const Profile = () => {
       <Link 
   to="/recover" 
   className="grid w-full cursor-pointer select-none rounded-md border bg-[#63b0c9] py-1 px-1 text-center text-white shadow hover:bg-[#5296a7]">
-  Forgot Password?
+  Reset Password?
 </Link>
 
     </div>
