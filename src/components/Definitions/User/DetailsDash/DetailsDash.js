@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../../Admin/Admin.css";
 import "../User.css";
 
+
 // Star component for the rating system
 const Star = ({ filled, onClick }) => (
   <span
@@ -18,7 +19,7 @@ const Star = ({ filled, onClick }) => (
   </span>
 );
 
-const URL = "http://localhost:5000/inventory";
+const URL = "http://localhost:5000/definition";
 
 const fetchHandler = async () => {
   return await axios.get(URL).then((res) => res.data);
@@ -54,7 +55,9 @@ function DetailsDash() {
     setInven(updatedInven);
   };
 
+
   return (
+    
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "auto" }}>
       {/* Search Input */}
       <div className="search-container" style={{ marginBottom: "30px", textAlign: "center" }}>

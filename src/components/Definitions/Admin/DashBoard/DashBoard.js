@@ -1,10 +1,11 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useReactToPrint } from "react-to-print";
 import StarRating from "../StarRating"; // Import the StarRating component
 
-const URL = "http://localhost:5000/inventory";
+const URL = "http://localhost:5000/definition";
 
 const fetchHandler = async () => {
   try {
@@ -16,10 +17,9 @@ const fetchHandler = async () => {
   }
 };
 
-
 function DashBoard() {
   const [inven, setInven] = useState([]);
-
+  
   useEffect(() => {
     fetchHandler().then((data) => {
       console.log(data.inven); // Log the fetched inventory to check ratings
@@ -30,7 +30,7 @@ function DashBoard() {
   const history = useNavigate();
   const deleteHandler = async (_id) => {
     const confirmed = window.confirm("Are you sure you want to delete this Details?");
-
+    
     if (confirmed) {
       try {
         await axios.delete(`${URL}/${_id}`);
@@ -42,12 +42,31 @@ function DashBoard() {
     }
   };
 
-  const ComponentsRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => ComponentsRef.current,
-    DocumentTitle: "Details Report",
-    onafterprint: () => alert("Details Report Successfully Downloaded!"),
-  });
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text('Definitions Report', 15, 18); // Adjust the text position as needed
+
+    // Table headers
+    const headers = ['User\'s Name', 'Date', 'Word', 'Definition', 'Rating'];
+
+    // Table data
+    const data = inven.map(item => [
+      item.username,
+      item.date,
+      item.word,
+      item.definition,
+      item.rating || 0 // Ensure rating has a default value
+    ]);
+
+    // Add table using autotable plugin
+    doc.autoTable({
+      head: [headers],
+      body: data,
+    });
+
+    // Save the PDF
+    doc.save('Definitions.pdf');
+  };
 
   const [searchQuery, setSearchQuery] = useState("");
   const [noResults, setNoResults] = useState(false);
@@ -66,12 +85,12 @@ function DashBoard() {
 
   return (
     <div>
-      {/* Top section with inline CSS for the button */}
+      {/* Top section with inline CSS for the buttons */}
       <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px", marginBottom: "20px" }}>
         <Link to="/userdetailsdash">
           <button
             style={{
-              backgroundColor: "#007bff",
+              backgroundColor: "#63b0c9",
               color: "white",
               padding: "10px 20px",
               border: "none",
@@ -86,10 +105,26 @@ function DashBoard() {
             Go to Details Page
           </button>
         </Link>
+        <button
+          style={{
+            backgroundColor: "#28a745",
+            color: "white",
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "16px",
+            marginLeft: "10px",
+            transition: "background-color 0.3s ease",
+          }}
+          onClick={downloadPDF} // Change this to downloadPDF
+        >
+          Download Report
+        </button>
       </div>
 
       <div className="children_div_admin">
-        <div className="tbl_con_admin" ref={ComponentsRef}>
+        <div className="tbl_con_admin">
           <h1 className="topic_inventory">
             Added Definitions <span className="sub_topic_inventory"></span>
           </h1>
@@ -101,7 +136,7 @@ function DashBoard() {
                 <th className="admin_tbl_th">Date</th>
                 <th className="admin_tbl_th">Word</th>
                 <th className="admin_tbl_th">Definitions</th>
-                <th className="admin_tbl_th">Rating</th> {/* New Rating Column */}
+                <th className="admin_tbl_th">Rating</th>
                 <th className="admin_tbl_th">Action</th>
               </tr>
             </thead>
@@ -121,7 +156,7 @@ function DashBoard() {
                     <td className="admin_tbl_td">{item.word}</td>
                     <td className="admin_tbl_td">{item.definition}</td>
                     <td className="admin_tbl_td">
-                      <StarRating rating={item.rating || 0} /> {/* Use a default rating of 0 if undefined */}
+                      <StarRating rating={item.rating || 0} />
                     </td>
                     <td className="admin_tbl_td">
                       <button onClick={() => deleteHandler(item._id)} className="btn_dash_admin_dlt">

@@ -135,11 +135,11 @@ function Additem() {
     console.log(inputs);
     await sendRequest();
     window.alert("Added successfully!");
-    navigate("/");
+    navigate("/userdetailsdash");
   };
 
   const sendRequest = async () => {
-    await axios.post("http://localhost:5000/inventory", {
+    await axios.post("http://localhost:5000/definition", {
       date: inputs.date,
       word: inputs.word,
       definition: inputs.definition,

@@ -62,7 +62,7 @@
     font-size: 18px;
     border-radius: 3px;
     margin: 0 15px 0 0;
-    border: 2px solid #1b4850;
+    border: 2px solid #63b0c9;
   }
   
   .topic_inventory {
@@ -72,7 +72,7 @@
   }
   
   .sub_topic_inventory {
-    color: #1b4850;
+    color: #63b0c9;
   }
   .tbl_con_admin {
     margin-top: 25px;
@@ -80,7 +80,7 @@
   }
   
   .summry_admindsh {
-    background-color: #1b4850;
+    background-color: #63b0c9;
     padding: 20px 15px;
     border-radius: 5px;
     width: 300px;
@@ -101,12 +101,12 @@
   
   .table_details_admin .admin_tbl_th,
   .table_details_admin .admin_tbl_td {
-    border: 2px solid #1b4850;
+    border: 2px solid #63b0c9;
     padding: 8px;
   }
   
   .table_details_admin .admin_tbl_th {
-    background-color: #1b4850;
+    background-color: #63b0c9;
     color: white;
     font-size: 18px;
   }

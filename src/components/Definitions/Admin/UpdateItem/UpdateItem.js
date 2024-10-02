@@ -82,7 +82,7 @@ function UpdateItem() {
   useEffect(() => {
     const fetchHandler = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/inventory/${id}`);
+        const response = await axios.get(`http://localhost:5000/definition/${id}`);
         setInputs(response.data.inven);
         setRating(response.data.inven.rating || 0); // Set initial rating if exists
       } catch (error) {
@@ -93,7 +93,7 @@ function UpdateItem() {
   }, [id]);
 
   const sendRequest = async () => {
-    await axios.put(`http://localhost:5000/inventory/${id}`, {
+    await axios.put(`http://localhost:5000/definition/${id}`, {
       date: String(inputs.date),
       word: String(inputs.word),
       definition: String(inputs.definition),
@@ -117,8 +117,10 @@ function UpdateItem() {
     e.preventDefault();
     await sendRequest(); // Wait for the update to complete
     window.alert("Updated successfully!"); // Show success message
-    navigate("/"); // Navigate back to the dashboard
+    navigate("/dashbord"); // Navigate back to the dashboard
   };
+  
+  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -164,7 +166,7 @@ function UpdateItem() {
               value={inputs.word}
               onChange={handleChange}
               name="word"
-              required
+              readOnly
               style={{ width: "50%", height: "30px", fontSize: "16px" }}
             />
             <br />
@@ -178,7 +180,7 @@ function UpdateItem() {
               value={inputs.definition}
               onChange={handleChange}
               name="definition"
-              required
+              readOnly
               style={{ width: "95%", height: "80px", fontSize: "16px" }}
             />
             <br />
