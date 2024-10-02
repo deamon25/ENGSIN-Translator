@@ -90,6 +90,12 @@ const Profile = () => {
             <strong className="text-[#63b0c9]">Email:</strong> {user.email}
           </p>
         </div>
+
+        <div className="border border-[#63b0c9] p-4 bg-white rounded-md shadow-md">
+          <p className="text-xl font-semibold text-gray-700">
+            <strong className="text-[#63b0c9]">Phone No:</strong> {user.phone}
+          </p>
+        </div>
       </div>
 
       <Link 

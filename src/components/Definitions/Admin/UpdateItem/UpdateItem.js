@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Library to decode JWT
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import "../Admin.css";
@@ -27,7 +27,7 @@ function RatingComponent({ rating, onRatingChange }) {
 }
 
 function UpdateItem() {
-  const { userId: paramUserId } = useParams();// Get userId from the URL if passed
+  const { userId: paramUserId } = useParams(); // Get userId from the URL if passed
   const [userId, setUserId] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,7 +82,7 @@ function UpdateItem() {
   useEffect(() => {
     const fetchHandler = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/inventory/${id}`);
+        const response = await axios.get(`http://localhost:5000/definition/${id}`);
         setInputs(response.data.inven);
         setRating(response.data.inven.rating || 0); // Set initial rating if exists
       } catch (error) {
@@ -93,7 +93,7 @@ function UpdateItem() {
   }, [id]);
 
   const sendRequest = async () => {
-    await axios.put(`http://localhost:5001/inventory/${id}`, {
+    await axios.put(`http://localhost:5000/definition/${id}`, {
       date: String(inputs.date),
       word: String(inputs.word),
       definition: String(inputs.definition),
@@ -117,13 +117,18 @@ function UpdateItem() {
     e.preventDefault();
     await sendRequest(); // Wait for the update to complete
     window.alert("Updated successfully!"); // Show success message
-    navigate("/"); // Navigate back to the dashboard
+    navigate("/dashbord"); // Navigate back to the dashboard
   };
+  
+  
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div>
       <div className="children_div_admin">
-        <h1 className="topic_inventory">Update Definitions</h1>
+        <h1 className="topic_inventory"><b>Update Ratings</b></h1>
         <div className="item_full_box">
           <form className="item_form_admin" onSubmit={handleSubmit}>
             {/* Username field - readOnly */}
@@ -132,7 +137,7 @@ function UpdateItem() {
             <input
               className="form_box_item_input"
               type="text"
-              value={user.firstName}
+              value={user ? user.firstName : ''} // Check if user exists
               name="username"
               readOnly
               style={{ width: "50%", height: "30px", fontSize: "16px" }}
@@ -161,7 +166,7 @@ function UpdateItem() {
               value={inputs.word}
               onChange={handleChange}
               name="word"
-              required
+              readOnly
               style={{ width: "50%", height: "30px", fontSize: "16px" }}
             />
             <br />
@@ -175,7 +180,7 @@ function UpdateItem() {
               value={inputs.definition}
               onChange={handleChange}
               name="definition"
-              required
+              readOnly
               style={{ width: "95%", height: "80px", fontSize: "16px" }}
             />
             <br />

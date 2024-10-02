@@ -14,9 +14,10 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email format').required('Email is required'),
   password: Yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
   phone: Yup.string()
-    .matches(/^\+?[0-9]*$/, 'Invalid phone number')
-    .nullable(),
+    .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits')
+    .required('Phone number is required'), // Ensure phone number cannot be null or empty
 });
+
 
 const SignUp = () => {
   const navigate = useNavigate();
