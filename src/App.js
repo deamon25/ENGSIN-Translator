@@ -15,6 +15,7 @@ import User_login from './components/UserManagement/User/User_login';
 import User_signup from './components/UserManagement/User/User_signup';
 import Usermanage from './components/UserManagement/User/Usermanage';
 
+
 import Navbar from './components/UserManagement/Navbar';
 
 
@@ -32,7 +33,7 @@ function App() {
       
           <Route path="/updateitem/:id" element={<UpdateItem />} />
       
-          <Route path="/userdetailsdash" element={<DetailsDash />} />
+          <Route path="/userdetailsdash" element={<> <TopNav/> <DetailsDash /></>} />
           <Route path="/dashbord" element={<DashBoard />} />
      
         <Route path="/" element={<><TopNav/></>} />
