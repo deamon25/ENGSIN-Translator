@@ -41,30 +41,32 @@ function Translator() {
         setLoading(true);
         setError(null);
     
-        
         let sentences = fromText.match(/[^.!?]+[.!?]*/g) || [];
     
         let translatedSentences = sentences.map((sentence) => {
-            
             let foundIdiom = false;
             let translatedSentence = sentence;
     
             for (const [idiom, translation] of Object.entries(idioms)) {
-                const regex = new RegExp(`\\b${idiom}\\b`, 'gi'); 
+                const regex = new RegExp(`\\b${idiom}\\b`, 'gi');
                 if (regex.test(sentence)) {
                     translatedSentence = sentence.replace(regex, translation);
                     foundIdiom = true;
-                    break; 
+                    break;
                 }
             }
     
-            
             if (foundIdiom) {
                 return Promise.resolve(translatedSentence);
             }
     
-            
-            let url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(sentence) + '&langpair=' + fromLanguage + '|' + toLanguage;
+            let url =
+                'https://api.mymemory.translated.net/get?q=' +
+                encodeURIComponent(sentence) +
+                '&langpair=' +
+                fromLanguage +
+                '|' +
+                toLanguage;
     
             return fetch(url)
                 .then((res) => {
@@ -77,16 +79,19 @@ function Translator() {
                     return data.responseData.translatedText || sentence;
                 })
                 .catch((err) => {
-                    setError(err.message); 
-                    return sentence; 
+                    setError(err.message);
+                    return sentence;
                 });
         });
     
-        
         Promise.all(translatedSentences)
             .then((translatedArray) => {
-                setToText(translatedArray.join(' ')); 
+                const finalTranslation = translatedArray.join(' ');
+                setToText(finalTranslation);
                 setLoading(false);
+    
+                // Call saveTranslation after the translation is complete
+                saveTranslation(fromText, finalTranslation);
             })
             .catch((err) => {
                 setError('Error translating the text');
