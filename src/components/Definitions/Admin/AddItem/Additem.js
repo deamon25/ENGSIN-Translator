@@ -22,13 +22,18 @@ function Additem() {
       try {
         const response = await axios.get(`http://localhost:5000/api/users/${id}`);
         setUser(response.data);
+        // Set the username (firstName) directly in the inputs state
+        setInputs((prevInputs) => ({
+          ...prevInputs,
+          username: response.data.firstName || "", // Set username from fetched user data
+        }));
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch user data");
         setLoading(false);
       }
     };
-
+    
     if (paramUserId) {
       // Admin is viewing someone else's profile
       setUserId(paramUserId);
@@ -130,11 +135,11 @@ function Additem() {
     console.log(inputs);
     await sendRequest();
     window.alert("Added successfully!");
-    navigate("/");
+    navigate("/userdetailsdash");
   };
 
   const sendRequest = async () => {
-    await axios.post("http://localhost:5000/inventory", {
+    await axios.post("http://localhost:5000/definition", {
       date: inputs.date,
       word: inputs.word,
       definition: inputs.definition,
@@ -150,7 +155,7 @@ function Additem() {
     <div>
       <div className="children_div_admin">
         <h1 className="topic_inventory">
-          Add Definitions <span className="sub_topic_inventory"> </span>
+          <b>Add Definitions</b> <span className="sub_topic_inventory"> </span>
         </h1>
 
         <div className="item_full_box">

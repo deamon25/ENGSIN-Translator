@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const InventorySchema = new Schema({
+const DefinitionSchema = new Schema({
   word: {
     type: String,
     required: true,
@@ -13,24 +13,16 @@ const InventorySchema = new Schema({
   },
   username: {
     type: String,
-    required: true,
-  },
-  price: {
-    type: String,
-    required: false,
+    required: false, // Optional username
   },
   date: {
     type: String,
     required: true,
   },
-  imgurl: {
-    type: String,
-    required: false,
-  },
   rating: {
     type: Number,
-    required: false,  // Default rating value
+    default: 0,  // Default rating value
   },
 });
 
-module.exports = mongoose.model("Words", InventorySchema);
+module.exports = mongoose.model("Definition", DefinitionSchema);  // Changed to "Definition" for better clarity

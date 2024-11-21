@@ -1,16 +1,10 @@
-* {
+/* * {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
 }
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #63b0c9;
-  min-height: 100vh;
-}
+
 
 .custom-container {
   max-width: 700px;
@@ -96,3 +90,11 @@ button {
   font-size: 18px;
   background: #63b0c9;
 }
+
+
+.mic-listening {
+  color: black;
+  animation: pulse 1s infinite;
+   /* Optional: Change the color to indicate it's active */
+
+   

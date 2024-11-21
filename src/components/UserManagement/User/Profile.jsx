@@ -90,12 +90,18 @@ const Profile = () => {
             <strong className="text-[#63b0c9]">Email:</strong> {user.email}
           </p>
         </div>
+
+        <div className="border border-[#63b0c9] p-4 bg-white rounded-md shadow-md">
+          <p className="text-xl font-semibold text-gray-700">
+            <strong className="text-[#63b0c9]">Phone No:</strong> {user.phone}
+          </p>
+        </div>
       </div>
 
       <Link 
   to="/recover" 
   className="grid w-full cursor-pointer select-none rounded-md border bg-[#63b0c9] py-1 px-1 text-center text-white shadow hover:bg-[#5296a7]">
-  Forgot Password?
+  Reset Password?
 </Link>
 
     </div>
